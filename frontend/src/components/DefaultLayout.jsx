@@ -34,10 +34,10 @@ export default function DefaultLayout(){
             <header>
                 <div>
                     <h3>
-                    Project
+                    System
                     </h3>
                 </div>
-                <div>
+                <div className="name-user">
                     Olá, {user.name}
                     
                     <a href="#" onClick={onLogout} className="btn-logout"> Logout</a>

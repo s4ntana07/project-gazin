@@ -4,90 +4,112 @@ import { Link } from "react-router-dom";
 import axiosClient from "../axiosClient";
 import { Helmet } from "react-helmet";
 
-export default function ProductTable(){
-    const [product, setProduct] = useState([]);
-    const [loading, setLoading] = useState(false);
+export default function ProductTable() {
+  const [product, setProduct] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
-    useEffect(()=> {
-        getProduct();
-    }, [])
+  useEffect(() => {
+    getProduct();
+  }, [])
 
-    const onDeleteClick = product => {
-        if (!window.confirm("Você tem certeza que deseja deletar este produto?")) {
-          return
-        }
-        axiosClient.delete(`/products/${product.id}`)
-          .then(() => {
-            getProduct()
-          })
-      }
+  const onDeleteClick = product => {
+    if (!window.confirm("Você tem certeza que deseja deletar este produto?")) {
+      return
+    }
+    axiosClient.delete(`/products/${product.id}`)
+      .then(() => {
+        getProduct()
+      })
+  }
 
-    const getProduct = () => {
-        setLoading(true)
-        axiosClient.get('/products')
-          .then(({ data }) => {
-            setLoading(false)
-            setProduct(data.data)
-          })
-          .catch(() => {
-            setLoading(false)
-          })
-      }
+  const getProduct = () => {
+    setLoading(true)
+    axiosClient.get('/products')
+      .then(({ data }) => {
+        setLoading(false)
+        setProduct(data.data)
+      })
+      .catch(() => {
+        setLoading(false)
+      })
+  }
 
-    return(
-        <div>
-          <Helmet>
-            <title>Produtos</title>
-          </Helmet>
-        <div style={{display: 'flex', justifyContent: "space-between", alignItems: "center"}}>
-          <h1>Users</h1>
-          <Link className="btn-add" to="/users/new">Add new</Link>
+  const filteredProduct = product.filter(product =>
+    product.price.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.company.toLowerCase().includes(searchTerm.toLowerCase()) ||
+    product.type.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
+  return (
+    <center>
+    <div>
+      <Helmet>
+        <title>Produtos</title>
+      </Helmet>
+      <div>
+      <h1 className="h1">Products</h1>
+          <input
+            className="input-busca"
+            type="text"
+            placeholder="Search products..."
+            value={searchTerm}
+            onChange={e => setSearchTerm(e.target.value)}
+          />
         </div>
-        <div className="card animated fadeInDown">
-          <table id="tabela">
-            <thead>
+      <div className="card animated fadeInDown">
+        <table id="tabela">
+          <thead>
             <tr>
               <th>ID</th>
               <th>Nome</th>
               <th>Preço</th>
-              <th>Estpque</th>
+              <th>Estoque</th>
               <th>Tipo</th>
               <th>Fabricante</th>
               <th>Descrição</th>
               <th>Actions</th>
             </tr>
-            </thead>
-            {loading &&
-              <tbody>
+          </thead>
+          {loading &&
+            <tbody>
               <tr>
                 <td colSpan="5" className="text-center">
                   Loading...
                 </td>
               </tr>
-              </tbody>
-            }
-            {!loading &&
-              <tbody>
-              {product.map(p => (
-                <tr key={p.id}>
-                  <td>{p.id}</td>
-                  <td>{p.name}</td>
-                  <td>{p.price}</td>
-                  <td>{p.stock}</td>
-                  <td>{p.type}</td>
-                  <td>{p.comapany}</td>
-                  <td>{p.description}</td>
-                  <td>
-                    <Link className="btn-edit" to={'/products/' + p.id}>Edit</Link>
-                    &nbsp;
-                    <button className="btn-delete" onClick={ev => onDeleteClick(p)}>Delete</button>
-                  </td>
+            </tbody>
+          }
+          {!loading &&
+            <tbody>
+              {filteredProduct.length === 0 ? (
+                <tr>
+                  <td colSpan="8" className="text-center">Nenhum produto encontrado</td>
                 </tr>
-              ))}
-              </tbody>
-            }
-          </table>
-        </div>
+              ) : (
+                filteredProduct.map(p => (
+                  <tr key={p.id}>
+                    <td>{p.id}</td>
+                    <td>{p.name}</td>
+                    <td>{p.price}</td>
+                    <td>{p.stock}</td>
+                    <td>{p.type}</td>
+                    <td>{p.company}</td>
+                    <td>{p.description}</td>
+                    <td>
+                      <Link className="btn-edit" to={'/products/' + p.id}>Edit</Link>
+                      &nbsp;
+                      <button className="btn-delete" onClick={ev => onDeleteClick(p)}>Delete</button>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          }
+        </table>
       </div>
-    )
+    </div>
+    </center>
+  )
 }

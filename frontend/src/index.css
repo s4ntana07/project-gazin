@@ -17,7 +17,7 @@ body {
     padding: 0;
     font-size: 14px;
     color: #ffffff;
-    background-color: #212121;
+    background-color: #292929;
 }
 
 input {
@@ -26,6 +26,7 @@ input {
     width: 100%;
     border: 2px solid #e6e6e6;
     margin: 0 0 15px;
+    margin-top: 5px;
     padding: 15px;
     box-sizing: border-box;
     font-size: 14px;
@@ -68,7 +69,7 @@ input:focus {
 }
 
 .link-users:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .link-home{
@@ -80,7 +81,7 @@ input:focus {
 }
 
 .link-home:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn-block {
@@ -109,7 +110,7 @@ input:focus {
     border-radius: 6px;
 }
 .btn-logout:hover {
-    background-color: rgba(0, 0, 0, 0.1);
+    background-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn:hover,
@@ -187,6 +188,10 @@ table > tbody > tr > td {
     box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
 }
 
+.login-signup-form .form input {
+    border-radius: 6px;
+}
+
 .login-signup-form .title {
     font-size: 20px;
     margin-bottom: 1rem;
@@ -205,7 +210,52 @@ table > tbody > tr > td {
     text-decoration: none;
 }
 
-/* Login/Signup form */
+.addproduct-form {
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.addproduct-form .form {
+    width: 430px;
+    position: relative;
+    z-index: 1;
+    background: #181818;
+    max-width: 430px;
+    padding: 34px;
+    box-shadow: 0 0 2px 0 rgba(0, 0, 0, 0.1);
+}
+
+.addproduct-form .form input {
+    border-radius: 6px;
+}
+
+.addproduct-form .title {
+    font-size: 20px;
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.addproduct-form textarea {
+    width: 362px;
+    height: 65px;
+    margin-bottom: 15px;
+    margin-top: 5px;
+    border-radius: 6px;
+}
+
+.addproduct-form .form .message {
+    margin: 15px 0 0;
+    color: #b3b3b3;
+    font-size: 16px;
+    text-align: center;
+}
+
+.addproduct-form .form .message a {
+    color: #6a0cc2;
+    text-decoration: none;
+}
 
 
 #defaultLayout {
@@ -238,8 +288,8 @@ table > tbody > tr > td {
 #defaultLayout header {
     height: 80px;
     padding: 2rem 3rem;
-    background-color: #181818;
-    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+    background:linear-gradient(to left,#131313,#212121,#131313);
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.2);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -273,11 +323,31 @@ table > tbody > tr > td {
 }
 
 .home-page{
-    width: 500px;
+    width: 550px;
+}
+
+.home-page p {
+    font-size: 16px;
+    padding: 1rem;
 }
 
 .input-busca{
-    width: 600px;
+    width: 500px;
     height: 30px;
-    background-color: white;
+    margin-bottom: 10px;
+    border-radius: 10px;
+}
+
+.h1 {
+    margin-bottom: 10px;
+}
+
+label {
+    margin-left: 10px;
+    margin-bottom: 10px;
+}
+
+.error-message{
+    color: #b72424;
+    font-weight: bold;
 }

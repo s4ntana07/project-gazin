@@ -19,29 +19,29 @@ class RegisterController extends Controller
      */
     public function register(Request $request)
     {
-        // Validar os dados recebidos
+        // validar os dados recebidos
         $validator = Validator::make($request->all(), [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
 
-        // Se a validação falhar, retorne erros
+        // se a validação falhar, retorne erros
         if ($validator->fails()) {
             throw new ValidationException($validator);
         }
 
-        // Criar o usuário
+        // criar o usuário
         $user = User::create([
             'name' => $request->input('name'),
             'email' => $request->input('email'),
             'password' => Hash::make($request->input('password')),
         ]);
 
-        // Gerar um token de autenticação para o usuário
+        // gerar um token de autenticação para o usuário
         $token = $user->createToken('Personal Access Token')->plainTextToken;
 
-        // Retornar a resposta com dados do usuário e token
+        // retornar a resposta com dados do usuário e token
         return response()->json([
             'user' => $user,
             'token' => $token,

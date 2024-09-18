@@ -11,9 +11,9 @@ class ProductController extends Controller
     public function index()
     {
         $products = Product::all();
-        return response()->json($products);
+        return response()->json(['data' => $products]);
     }
-
+    
     // Método para exibir um produto específico
     public function show($id)
     {
