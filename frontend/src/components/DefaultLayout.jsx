@@ -41,7 +41,6 @@ export default function DefaultLayout(){
                     Olá, {user.name}
                     
                     <a href="#" onClick={onLogout} className="btn-logout"> Logout</a>
-                    <Link className="link-users" to={'/users'}>Users</Link>
                     <Link className="link-home" to={'/home'}>Home</Link>
                     <Link className="link-home" to={'/addproduct'}>Adicionar Produto</Link>
                     <Link className="link-home" to={'/products'}>Listar Produtos</Link>

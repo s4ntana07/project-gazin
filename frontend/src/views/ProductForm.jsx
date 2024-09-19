@@ -18,7 +18,7 @@ export default function ProductForm() {
   });
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState(null);
-  const [submitLoading, setSubmitLoading] = useState(false); // Novo estado para loading de submissão
+  const [submitLoading, setSubmitLoading] = useState(false);
 
   if (id) {
     useEffect(() => {
@@ -36,7 +36,7 @@ export default function ProductForm() {
 
   const onSubmit = ev => {
     ev.preventDefault();
-    setSubmitLoading(true); // Ativa o loading de submissão
+    setSubmitLoading(true);
 
     if (product.id) {
       axiosClient.put(`/products/${product.id}`, product)
@@ -45,7 +45,7 @@ export default function ProductForm() {
         })
         .catch(err => {
           const response = err.response;
-          setSubmitLoading(false); // Desativa o loading de submissão
+          setSubmitLoading(false);
           if (response && response.status === 422) {
             setErrors(response.data.errors);
           }
@@ -57,7 +57,7 @@ export default function ProductForm() {
         })
         .catch(err => {
           const response = err.response;
-          setSubmitLoading(false); // Desativa o loading de submissão
+          setSubmitLoading(false);
           if (response && response.status === 422) {
             setErrors(response.data.errors);
           }
@@ -70,12 +70,11 @@ export default function ProductForm() {
       <Helmet>
         <title>Produtos</title>
       </Helmet>
-      {product.id && <h1>Update Product: {product.name}</h1>}
-      {!product.id && <h1>New Product</h1>}
+      {product.id && <h1>Atualizar Produto: {product.name}</h1>}
       <div className="card animated fadeInDown">
         {loading && (
           <div className="text-center">
-            Loading...
+            Carregando Produto...
           </div>
         )}
         {errors && (

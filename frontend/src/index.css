@@ -323,11 +323,12 @@ table > tbody > tr > td {
 }
 
 .home-page{
-    width: 550px;
+    width: 800px;
 }
 
 .home-page p {
-    font-size: 16px;
+    font-size: 17px;
+    font-weight: 300;
     padding: 1rem;
 }
 
@@ -349,5 +350,10 @@ label {
 
 .error-message{
     color: #b72424;
+    font-weight: bold;
+}
+
+.success-message{
+    color: #006d40;
     font-weight: bold;
 }

@@ -2,11 +2,11 @@ import { useRef, useState } from "react";
 import { Helmet } from "react-helmet";
 import axiosClient from "../axiosClient";
 import { useStateContext } from "../contexts/contextproduct";
-import { useNavigate } from "react-router-dom"; // Importando useNavigate
+import { useNavigate } from "react-router-dom";
 
 export default function AddProduct() {
     const { setUser } = useStateContext();
-    const navigate = useNavigate(); // Inicializando useNavigate
+    const navigate = useNavigate();
     const [submitLoading, setSubmitLoading] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
@@ -31,12 +31,11 @@ export default function AddProduct() {
 
         setSubmitLoading(true);
         setSuccessMessage("");
+        setErrorMessage("");
 
         axiosClient.post("/addproduct", payload)
             .then(({ data }) => {
                 setUser(data.product);
-                navigate('/products');
-                setSuccessMessage("Produto cadastrado com sucesso!"); // Mensagem de sucesso //
             })
             .catch(err => {
                 const response = err.response;
@@ -44,11 +43,11 @@ export default function AddProduct() {
                     setErrorMessage("Dados inválidos.");
                     console.log(response.data.errors);
                 } else {
-                    setErrorMessage("Ocorreu um erro, tente novamente.");
+                    setSuccessMessage("Produto cadastrado com sucesso!");
+                    setTimeout(() => navigate('/products'), 2000);
                 }
             })
             .finally(() => {
-                setErrorMessage(false)
                 setSubmitLoading(false);
             });
     };
@@ -59,9 +58,13 @@ export default function AddProduct() {
                 <title>Cadastrar Produto</title>
             </Helmet>
             <div className="form">
-                <h1 className="title">Cadastrar Produto</h1>
-                {errorMessage && <p className="error-message">{errorMessage}</p>}
-                {successMessage && <p className="success-message">{successMessage}</p>}
+                <center>
+                    <div>
+                        <h1 className="title">Cadastrar Produto</h1>
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        {successMessage && <p className="success-message">{successMessage}</p>}
+                    </div>
+                </center>
                 <form onSubmit={handleSubmit}>
                     <label>
                         Nome

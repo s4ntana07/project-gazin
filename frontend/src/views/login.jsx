@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRef, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosClient from "../axiosClient";
@@ -12,8 +11,8 @@ export default function Login() {
     const { setUser, setToken } = useStateContext();
 
     const [errorMessage, setErrorMessage] = useState("");
-    const [loading, setLoading] = useState(false); // Estado para controle de loading
-    const [submitLoading, setSubmitLoading] = useState(false); // Estado para controle de loading na submissão
+    const [submitLoading, setSubmitLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
     const submit = (ev) => {
         ev.preventDefault();
@@ -22,24 +21,26 @@ export default function Login() {
             password: passwordRef.current.value,
         };
 
-        setSubmitLoading(true); // Começa o loading de submissão
+        setSubmitLoading(true); // começa o loading de submissão
+        setSuccessMessage("");
+        setErrorMessage("");
 
         axiosClient.post("/login", payload)
             .then(({ data }) => {
                 setUser(data.user);
                 setToken(data.token);
-                navigate('/'); // Redireciona após o login
             })
             .catch(err => {
                 const response = err.response;
                 if (response && response.status === 422) {
                     setErrorMessage("Email ou senha inválidos.");
                 } else {
-                    setErrorMessage("Ocorreu um erro, tente novamente.");
+                    setSuccessMessage("Logado com sucesso!!");
+                    setTimeout(() => navigate('/home'), 2000);
                 }
             })
             .finally(() => {
-                setSubmitLoading(false); // Para o loading após a requisição
+                setSubmitLoading(false); // para o loading após a requisição
             });
     };
 
@@ -50,15 +51,20 @@ export default function Login() {
                     <title>Login</title>
                 </Helmet>
                 <div className="form">
-                    <h1 className="title">Entre Na Sua Conta</h1>
+                    <center>
+                        <div>
+                            <h1 className="title">Entrar na sua Conta</h1>
+                            {errorMessage && <p className="error-message">{errorMessage}</p>}
+                            {successMessage && <p className="success-message">{successMessage}</p>}
+                        </div>
+                    </center>
                     <form onSubmit={submit}>
                         <input required ref={emailRef} type="email" placeholder="Email" />
-                        <input required ref={passwordRef} type="password" placeholder="Password" />
+                        <input required ref={passwordRef} type="password" placeholder="Senha" />
                         {errorMessage && <p className="error-message">{errorMessage}</p>}
-                            <button className="btn btn-block" disabled={submitLoading}>
-                                {submitLoading ? 'Entrando...' : 'Entrar'}
-                            </button>
-
+                        <button className="btn btn-block" disabled={submitLoading}>
+                            {submitLoading ? 'Entrando...' : 'Entrar'}
+                        </button>
                         <p className="message">
                             Não Tem Um Usuário? <Link to='/register'>Criar Usuário</Link>
                         </p>

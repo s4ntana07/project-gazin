@@ -49,11 +49,11 @@ export default function ProductTable() {
         <title>Produtos</title>
       </Helmet>
       <div>
-      <h1 className="h1">Products</h1>
+      <h1 className="h1">Produtos</h1>
           <input
             className="input-busca"
             type="text"
-            placeholder="Search products..."
+            placeholder="Procurar produtos..."
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
@@ -76,7 +76,7 @@ export default function ProductTable() {
             <tbody>
               <tr>
                 <td colSpan="5" className="text-center">
-                  Loading...
+                  Carregando Produtos...
                 </td>
               </tr>
             </tbody>

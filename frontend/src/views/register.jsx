@@ -1,4 +1,3 @@
-import axios from "axios";
 import { useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import axiosClient from "../axiosClient";
@@ -13,6 +12,7 @@ export default function Register() {
 
     const [errorMessage, setErrorMessage] = useState("");
     const [submitLoading, setSubmitLoading] = useState(false);
+    const [successMessage, setSuccessMessage] = useState("");
 
 
     const submit = (ev) => {
@@ -23,7 +23,9 @@ export default function Register() {
             password: passwordRef.current.value,
         };
 
-        setSubmitLoading(true); // Começa o loading
+        setSubmitLoading(true); // começa o loading
+        setSuccessMessage("");
+        setErrorMessage("");
 
         axiosClient.post("/register", payload).then(({ data }) => {
             setUser(data.user);
@@ -34,11 +36,12 @@ export default function Register() {
                 setErrorMessage("Dados inválidos. Verifique seus dados e tente novamente.");
                 console.log(response.data.errors);
             } else {
-                setErrorMessage("Ocorreu um erro, tente novamente.");
+                setSuccessMessage("Cadastrado com sucesso!!");
+                setTimeout(() => navigate('/home'), 2000);
             }
         }).finally(() => {
             setErrorMessage(false)
-            setSubmitLoading(false);
+            setSubmitLoading(false); // termina o loading
         });
     };
 
@@ -48,11 +51,17 @@ export default function Register() {
                 <title>Cadastre-se</title>
             </Helmet>
             <div className="form">
-                <h1 className="title">Criar Novo Usuário</h1>
+                <center>
+                    <div>
+                        <h1 className="title">Entrar na sua Conta</h1>
+                        {errorMessage && <p className="error-message">{errorMessage}</p>}
+                        {successMessage && <p className="success-message">{successMessage}</p>}
+                    </div>
+                </center>
                 <form onSubmit={submit}>
-                    <input required ref={nameRef} type="text" placeholder="Name" />
+                    <input required ref={nameRef} type="text" placeholder="Nome" />
                     <input required ref={emailRef} type="email" placeholder="Email" />
-                    <input required ref={passwordRef} type="password" placeholder="Password" />
+                    <input required ref={passwordRef} type="password" placeholder="Senha" />
                     {errorMessage && <p className="error-message">{errorMessage}</p>}
                     <button className="btn btn-block" disabled={submitLoading}>
                         {submitLoading ? 'Registrando...' : 'Registrar'}
