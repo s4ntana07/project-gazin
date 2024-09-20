@@ -26,7 +26,6 @@ class AuthController extends Controller
             'user' => $user,
             'token' => $token
         ]);
-
     }
 
     public function register(RegisterRequest $request)
