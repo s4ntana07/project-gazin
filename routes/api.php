@@ -36,5 +36,9 @@ Route::get('products', [ProductController::class, 'index']);      // Listar todo
 Route::get('products/{id}', [ProductController::class, 'show']);  // Exibir um produto específico
 Route::put('products/{id}', [ProductController::class, 'update']); // Atualizar um produto existente
 Route::delete('products/{id}', [ProductController::class, 'destroy']); // Deletar um produto
-
+Route::post('addpedido', [PedidoController::class, 'store']); // Criar um novo pedido
+Route::get('pedidos', [PedidoController::class, 'index']);  // Listar todos os pedidos
+Route::get('pedidos/{id}', [PedidoController::class, 'show']); // Exibir um pedido específico
+Route::put('pedidos/{id}', [PedidoController::class, 'update']); // Atualizar um pedido existente
+Route::delete('pedidos/{id}', [PedidoController::class, 'destroy']); // Deletar um pedido
 

@@ -44,6 +44,7 @@ export default function DefaultLayout(){
                     <Link className="link-home" to={'/home'}>Home</Link>
                     <Link className="link-home" to={'/addproduct'}>Adicionar Produto</Link>
                     <Link className="link-home" to={'/products'}>Listar Produtos</Link>
+                    <Link className="link-home" to={'/makeorder'}>Fazer Pedidos</Link>
                 </div>
             </header>
             <main>

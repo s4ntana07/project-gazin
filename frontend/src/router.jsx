@@ -7,6 +7,7 @@ import Home from './views/home.jsx';
 import Addproduct from './views/addproduct.jsx';
 import ProductTable from './views/products.jsx';
 import ProductForm from './views/ProductForm.jsx';
+import MakeOrder from './views/addorder.jsx';
 
 const router = createBrowserRouter ([
     {
@@ -29,6 +30,11 @@ const router = createBrowserRouter ([
                 path: '/products/:id',
                 element: <ProductForm key="productUpdate" />
             },
+
+            {
+                path: '/makeorder',
+                element : <MakeOrder/>
+            }
         ]
     },
 

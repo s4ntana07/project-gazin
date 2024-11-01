@@ -1,46 +1,82 @@
-import React, { useState, useContext } from 'react';
-import { ContextProvider, useStateContext } from './Context/contextorder';
+import { useRef, useState } from "react";
+import { Helmet } from "react-helmet";
+import axiosClient from "../axiosClient";
+import { useStateContext } from "../contexts/contextproduct";
+import { useNavigate } from "react-router-dom";
 
-const Pedidos = () => {
-  const { user, token } = useStateContext();
+export default function MakeOrder() {
+  const { setUser } = useStateContext();
+  const navigate = useNavigate();
+  const [submitLoading, setSubmitLoading] = useState(false);
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
 
-  const [pedido, setPedido] = useState({
-    produto: '',
-    quantidade: '',
-    endereco: '',
-  });
+  const productRef = useRef();
+  const quantityRef = useRef();
+  const addressRef = useRef();
 
-  const handlePedido = (e) => {
-    setPedido({ ...pedido, [e.target.name]: e.target.value });
-  };
+  const handleSubmit = (ev) => {
+    ev.preventDefault();
+    const payload = {
+      product: productRef.current.value,
+      quantity: quantityRef.current.value,
+      address: addressRef.current.value,
+    };
 
-  const fazerPedido = (e) => {
-    e.preventDefault();
-    // Aqui você pode fazer a requisição para o servidor para criar o pedido
-    console.log(pedido);
+    setSubmitLoading(true);
+    setSuccessMessage("");
+    setErrorMessage("");
+
+    axiosClient.post("/makeorder", payload)
+      .then(({ data }) => {
+        setUser(data.order);
+      })
+      .catch(err => {
+        const response = err.response;
+        if (response && response.status === 422) {
+          setErrorMessage("Dados inválidos.");
+          console.log(response.data.errors);
+        } else {
+          setSuccessMessage("Pedido feito com sucesso!");
+          setTimeout(() => navigate('/orders'), 2000);
+        }
+      })
+      .finally(() => {
+        setSubmitLoading(false);
+      });
   };
 
   return (
-    <div>
-      <h1>Fazer Pedido</h1>
-      {user ? (
-        <form onSubmit={fazerPedido}>
-          <label>Produto:</label>
-          <input type="text" name="produto" value={pedido.produto} onChange={handlePedido} />
-          <br />
-          <label>Quantidade:</label>
-          <input type="number" name="quantidade" value={pedido.quantidade} onChange={handlePedido} />
-          <br />
-          <label>Endereço:</label>
-          <input type="text" name="endereco" value={pedido.endereco} onChange={handlePedido} />
-          <br />
-          <button type="submit">Fazer Pedido</button>
+    <div className="makeorder-form animated fadeinDown">
+      <Helmet>
+        <title>Fazer Pedido</title>
+      </Helmet>
+      <div className="form">
+        <center>
+          <div>
+            <h1 className="title">Fazer Pedido</h1>
+            {errorMessage && <p className="error-message">{errorMessage}</p>}
+            {successMessage && <p className="success-message">{successMessage}</p>}
+          </div>
+        </center>
+        <form onSubmit={handleSubmit}>
+          <label>
+            Produto
+            <input required ref={productRef} type="text" placeholder="Nome do Produto" />
+          </label>
+          <label>
+            Quantidade
+            <input required ref={quantityRef} type="text" placeholder="Quantidade do Produto" />
+          </label>
+          <label>
+            Endereço
+            <input required ref={addressRef} type="text" placeholder="Endereço de Entrega" />
+          </label>
+          <button className="btn btn-block" disabled={submitLoading}>
+            {submitLoading ? 'Fazendo Pedido...' : 'Fazer Pedido'}
+          </button>
         </form>
-      ) : (
-        <p>Você precisa estar logado para fazer um pedido.</p>
-      )}
+      </div>
     </div>
   );
-};
-
-export default Pedidos;
+}

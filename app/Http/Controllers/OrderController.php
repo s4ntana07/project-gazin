@@ -1,12 +1,10 @@
 <?php
 
-namespace App\Controllers;
+namespace App\Http\Controllers;
 
-use App\Models\Pedido;
-use App\Models\Produto;
-use CodeIgniter\Controller;
+use Illuminate\Http\Request;
 
-class PedidoController extends Controller
+class OrderController extends Controller
 {
     public function index()
     {
@@ -65,3 +63,4 @@ class PedidoController extends Controller
         return redirect()->to('/pedidos');
     }
 }
+
