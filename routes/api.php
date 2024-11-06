@@ -41,4 +41,4 @@ Route::get('pedidos', [PedidoController::class, 'index']);  // Listar todos os p
 Route::get('pedidos/{id}', [PedidoController::class, 'show']); // Exibir um pedido específico
 Route::put('pedidos/{id}', [PedidoController::class, 'update']); // Atualizar um pedido existente
 Route::delete('pedidos/{id}', [PedidoController::class, 'destroy']); // Deletar um pedido
-
+Route::get('export-products', 'ProductController@exportProductsToExcel');

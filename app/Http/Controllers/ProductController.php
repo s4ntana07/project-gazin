@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Product;
+use Maatwebsite\Excel\Facades\Excel;
 
 class ProductController extends Controller
 {
@@ -86,5 +87,34 @@ class ProductController extends Controller
 
         // Retorno da resposta
         return response()->json(['message' => 'Produto deletado com sucesso']);
+    }
+
+    public function exportProductsToExcel()
+    {
+        $products = Product::all();
+    
+        Excel::create('produtos', function ($excel) use ($products) {
+            $excel->sheet('Produtos', function ($sheet) use ($products) {
+                $sheet->row(1, [
+                    'Nome',
+                    'Preço',
+                    'Estoque',
+                    'Tipo',
+                    'Empresa',
+                    'Descrição'
+                ]);
+    
+                foreach ($products as $product) {
+                    $sheet->row($product->id, [
+                        $product->name,
+                        $product->price,
+                        $product->stock,
+                        $product->type,
+                        $product->company,
+                        $product->description
+                    ]);
+                }
+            });
+        })->download('xlsx');
     }
 }
