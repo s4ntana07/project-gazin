@@ -42,7 +42,7 @@ export default function ProductTable() {
     product.type.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const handleExportToExcel = () => {
+  const handleExportToXLSX = () => {
     const exportData = filteredProduct.map(product => ({
       ID: product.id,
       Nome: product.name,
@@ -53,31 +53,16 @@ export default function ProductTable() {
       Descrição: product.description,
     }));
 
-    const ws = XLSX.utils.json_to_sheet(exportData, {
-      header: [
-        'ID',
-        'Nome',
-        'Preço',
-        'Estoque',
-        'Tipo',
-        'Fabricante',
-        'Descrição',
-      ],
-    });
+    const xlsxContent = "ID,Nome,Preço,Estoque,Tipo,Fabricante,Descrição\n" +
+      exportData.map(product => Object.values(product).join(",")).join("\n");
 
-    ws['!cols'] = [
-      { wch: 10 }, // largura da coluna ID
-      { wch: 20 }, // largura da coluna Nome
-      { wch: 15 }, // largura da coluna Preço
-      { wch: 10 }, // largura da coluna Estoque
-      { wch: 15 }, // largura da coluna Tipo
-      { wch: 20 }, // largura da coluna Fabricante
-      { wch: 30 }, // largura da coluna Descrição
-    ];
+    const xlsxBlob = new Blob([xlsxContent], { type: "text/xlsx" });
+    const xlsxUrl = URL.createObjectURL(xlsxBlob);
+    const xlsxLink = document.createElement("a");
+    xlsxLink.href = xlsxUrl;
+    xlsxLink.download = "produtos.xlsx";
+    xlsxLink.click();
 
-    const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, 'Produtos');
-    XLSX.writeFile(wb, 'produtos.xlsx');
   };
 
   return (
@@ -95,7 +80,7 @@ export default function ProductTable() {
             value={searchTerm}
             onChange={e => setSearchTerm(e.target.value)}
           />
-          <button className="btn-export" onClick={handleExportToExcel}>Exportar para Excel</button>
+          <button className="btn-export" onClick={handleExportToXLSX}>Exportar para XLSX</button>
         </div>
         <div className="card animated fadeInDown">
           <table id="tabela">
@@ -150,5 +135,5 @@ export default function ProductTable() {
         </div>
       </div>
     </center>
-  )
+  );
 }
